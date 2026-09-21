@@ -55,7 +55,7 @@ The user interface SHALL conform to official Arduino Days design tokens, accessi
 - **THEN** all brand references prominently designate the event as "Arduino Day Philippines 2027" and "Volunteer Portal 2027".
 
 ### Requirement: 3D badge emblem with seamless alpha transparency
-The primary event logo SHALL use the transparent-background 3D Arduino Day Philippines emblem, rendering with smooth anti-aliased contours and zero white fringing against dark and light theme surfaces.
+The primary event logo SHALL use the transparent-background 3D Arduino Day Philippines emblem, rendering with high-resolution clarity (minimum 1024x1024 pixel source asset fidelity), smooth anti-aliased contours, crisp details on high-density (Retina/DPR ≥ 2) displays, and zero white fringing or blur against dark and light theme surfaces.
 
 #### Scenario: Logo display in Dark Mode header
 - **WHEN** the volunteer portal is viewed in dark mode
@@ -64,6 +64,10 @@ The primary event logo SHALL use the transparent-background 3D Arduino Day Phili
 #### Scenario: Logo display in Light Mode header
 - **WHEN** the volunteer portal is viewed in light mode
 - **THEN** the 3D emblem blends smoothly with the light background, maintaining vivid teal and orange colors, dimensionality, and crisp definition.
+
+#### Scenario: High-resolution clarity in 3D hero perspective wrapper
+- **WHEN** a user views the Hero section on a desktop, mobile, or high-DPI display
+- **THEN** the emblem badge renders sharply at full fidelity without pixelation, compression blur, or soft scaling artifacts during perspective tilt and stationary viewing.
 
 ### Requirement: Official Arduino Days design system and color palette
 The user interface SHALL implement the official Arduino Days 2026 design system as demonstrated on days.arduino.cc, featuring Arduino Teal (`#00979D`), Arduino Orange (`#F26727`), Charcoal typography (`#2C353A` / `#1E2529`), technical monospace tag pills, modular 1px solid bordered cards (`#DAE3E3` / `#2E383E`), and high-contrast flat buttons without neon glows or AI-slop visual artifacts.
@@ -141,3 +145,25 @@ The About section (`#about`) SHALL feature a responsive visual gallery showcasin
 #### Scenario: Viewing the event gallery on mobile
 - **WHEN** a visitor views the About section on mobile viewports (375px width)
 - **THEN** the gallery cards stack fluidly without horizontal scrollbars, maintaining sharp aspect ratios and responsive typography.
+
+### Requirement: Interactive 3D perspective parallax hero logo
+The hero section SHALL feature an interactive 3D perspective floating logo element that responds fluidly to user pointer/cursor movements on desktop viewports.
+
+#### Scenario: Pointer movement triggers dynamic perspective tilt
+- **WHEN** a user moves the cursor across the hero viewport on desktop (≥1024px)
+- **THEN** the logo tilts dynamically along the X and Y axes using 3D perspective (`perspective(600px)`), with gentle translation offsets and smooth CSS transitions (`transition: transform 0.1s ease-out`).
+
+#### Scenario: Responsive mobile fallback for hero logo
+- **WHEN** the hero section is viewed on mobile or tablet devices (<1024px) or on devices with `prefers-reduced-motion` enabled
+- **THEN** the logo renders in a centered, static or subtle floating orientation without mouse-tracking script overhead.
+
+### Requirement: Interactive 3D WebGL Arduino hardware board
+The volunteer portal SHALL provide an interactive 3D WebGL canvas that renders the official Arduino hardware model (`arduino.glb`) with orbit controls and continuous ambient rotation.
+
+#### Scenario: Interactive 3D board rendering and orbit controls
+- **WHEN** a user views the 3D board section in the About view
+- **THEN** the 3D Arduino board renders smoothly on an anti-aliased, transparent WebGL canvas with ambient rotation, allowing users to rotate and inspect the board via mouse drag or touch gestures.
+
+#### Scenario: Responsive canvas resizing
+- **WHEN** the browser window is resized
+- **THEN** the 3D canvas and camera projection matrix update dynamically to maintain the model's aspect ratio and center alignment without distortion or overflow.
