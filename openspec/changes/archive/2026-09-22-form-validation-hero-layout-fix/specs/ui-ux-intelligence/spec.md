@@ -22,3 +22,12 @@ The user interface SHALL conform to modern high-contrast design tokens, accessib
 #### Scenario: Neutral navigation labels
 - **WHEN** a visitor navigates the landing page navbar, hero secondary CTA, mobile navigation drawer, or footer
 - **THEN** the navigation links display "Sign In" (linking to `/login`) rather than role-specific "Organizer Login" or "Organizer Portal" copy.
+
+#### Scenario: Typography is large enough on desktop
+- **WHEN** a user views any volunteer portal section on a desktop viewport (1024px+)
+- **THEN** card body text is at minimum 15px, section paragraph text is at minimum 16px, and hero body text is at minimum 18px.
+
+#### Scenario: Wide viewport lateral fill
+- **WHEN** the site is viewed on a wide viewport (1280px+)
+- **THEN** the HeroSection and CommitteeGrid sections show visual fill content in their side margins rather than blank whitespace.
+

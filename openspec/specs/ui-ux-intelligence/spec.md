@@ -12,15 +12,27 @@ The workspace SHALL provide the complete `ui-ux-pro-max` skill package within `.
 - **THEN** the script returns verified JSON recommendations matching the query terms without crashing.
 
 ### Requirement: Arduino Day Philippines branding and responsive tokens
-The user interface SHALL conform to modern high-contrast design tokens, accessible touch target sizes (minimum 44x44px), and responsive mobile-first layouts. Typography SHALL use a minimum base font size of 16px for body content, with section headings at 20px or larger on desktop, and card body text at 15px or larger to address QA-reported readability concerns. Sections with wide lateral margins (CommitteeGrid, HeroSection, RulesSection) SHALL include visually enriching lateral fill content such as floating stat panels, decorative grid patterns, or floating badge elements to reduce perceived emptiness on wide viewports.
+The user interface SHALL conform to modern high-contrast design tokens, accessible touch target sizes (minimum 44×44px), and responsive mobile-first layouts. The hero section layout SHALL use a non-overlapping two-column grid at the `lg:` breakpoint (≥1024px): the main headline and supporting content in the primary column, and the supplementary stats panel in a secondary column. At viewports below `lg:`, the stats panel SHALL be hidden. The stats panel SHALL NOT use absolute positioning relative to the hero content that can cause overlap with the headline text at any supported viewport width. The centralized login page and portal navigation SHALL use consistent design system tokens for background, border, and typography supporting dark and light themes, and navigation elements SHALL present a neutral "Sign In" label.
 
 #### Scenario: Mobile viewport responsiveness
-- **WHEN** the volunteer application or organizer dashboard is viewed on a mobile viewport (375px width)
+- **WHEN** the volunteer application, centralized login page, or organizer dashboard is viewed on a mobile viewport (375px width)
 - **THEN** the layout renders without horizontal scrollbars, form controls remain easily tappable, and typography remains readable.
 
 #### Scenario: Accessible form focus and feedback
-- **WHEN** an applicant or organizer navigates using keyboard tab controls
+- **WHEN** an applicant or user navigates using keyboard tab controls
 - **THEN** all interactive form inputs and action buttons display distinct, high-contrast focus rings.
+
+#### Scenario: Hero stats panel does not overlap headline at 1024px–1279px
+- **WHEN** a user views the hero section at a viewport width between 1024px and 1279px (the `lg` to `xl` range)
+- **THEN** the stats panel is displayed in its own column adjacent to the headline without any text overlap.
+
+#### Scenario: Hero stats panel hidden below lg breakpoint
+- **WHEN** a user views the hero section at a viewport width below 1024px
+- **THEN** the stats panel is not rendered or is visually hidden, and the headline is fully legible.
+
+#### Scenario: Neutral navigation labels
+- **WHEN** a visitor navigates the landing page navbar, hero secondary CTA, mobile navigation drawer, or footer
+- **THEN** the navigation links display "Sign In" (linking to `/login`) rather than role-specific "Organizer Login" or "Organizer Portal" copy.
 
 #### Scenario: Typography is large enough on desktop
 - **WHEN** a user views any volunteer portal section on a desktop viewport (1024px+)
