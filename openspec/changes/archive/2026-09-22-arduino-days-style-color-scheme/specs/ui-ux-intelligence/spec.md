@@ -27,3 +27,36 @@ The user interface SHALL conform to official Arduino Days design tokens, accessi
 #### Scenario: Accessible form focus and feedback
 - **WHEN** an applicant or organizer navigates using keyboard tab controls
 - **THEN** all interactive form inputs and action buttons display distinct, high-contrast focus rings using Arduino Teal (`#00979D`).
+
+#### Scenario: Absence of generic AI visual clichés
+- **WHEN** a user navigates the landing page, form, or sign-in views
+- **THEN** the page renders without decorative blur spheres (`blur-3xl`), pulsating badges (`animate-pulse`), or multicolored gradient text clips.
+
+#### Scenario: Authentic grounded event presentation and human copy
+- **WHEN** an applicant reviews the event overview, committee descriptions, and volunteer conduct guidelines
+- **THEN** the copy avoids AI filler and buzzwords (such as "delve", "foster", "vital role", "driving force", "highest impact", or "build the future"), communicating direct, factual information about the event schedule, shift hours, and committee duties.
+
+#### Scenario: Hero stats panel does not overlap headline at 1024px–1279px
+- **WHEN** a user views the hero section at a viewport width between 1024px and 1279px (the `lg` to `xl` range)
+- **THEN** the stats panel is displayed in its own column adjacent to the headline without any text overlap.
+
+#### Scenario: Hero stats panel hidden below lg breakpoint
+- **WHEN** a user views the hero section at a viewport width below 1024px
+- **THEN** the stats panel is not rendered or is visually hidden, and the headline is fully legible.
+
+#### Scenario: Neutral navigation labels
+- **WHEN** a visitor navigates the landing page navbar, hero secondary CTA, mobile navigation drawer, or footer
+- **THEN** the navigation links display "Sign In" (linking to `/login`) rather than role-specific "Organizer Login" or "Organizer Portal" copy.
+
+#### Scenario: Typography is large enough on desktop
+- **WHEN** a user views any volunteer portal section on a desktop viewport (1024px+)
+- **THEN** card body text is at minimum 15px, section paragraph text is at minimum 16px, and hero body text is at minimum 18px.
+
+#### Scenario: Wide viewport lateral fill
+- **WHEN** the site is viewed on a wide viewport (1280px+)
+- **THEN** the HeroSection and CommitteeGrid sections show visual fill content in their side margins rather than blank whitespace.
+
+#### Scenario: Event year consistency
+- **WHEN** a user navigates any page of the volunteer portal (landing, hero, about, faq, rules, and footer)
+- **THEN** all brand references prominently designate the event as "Arduino Day Philippines 2027" and "Volunteer Portal 2027".
+
