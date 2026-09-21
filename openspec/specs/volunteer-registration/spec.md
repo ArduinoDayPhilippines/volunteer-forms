@@ -16,7 +16,7 @@ The system SHALL present an event overview for Arduino Day Philippines, detail e
 - **THEN** the system displays required conduct guidelines and event attendance commitments that must be acknowledged before submitting the form.
 
 ### Requirement: Multi-step volunteer application submission
-The system SHALL provide an interactive application form collecting applicant details, committee preferences, skills, and sizing, and require rule acknowledgment prior to submission. The form SHALL enforce format validation on all phone number fields — including the applicant's contact number and the emergency contact phone — before allowing advancement to the next step. Phone fields SHALL only accept values matching a valid numeric telephone format (Philippine mobile numbers starting with `09`, international numbers starting with `+`, or strings containing 7–20 digits with optional spaces, hyphens, and parentheses). Strings composed entirely of non-numeric characters SHALL be rejected with an inline error message at the field.
+The system SHALL provide an interactive application form collecting applicant details, committee preferences, skills, and sizing, and require rule acknowledgment prior to submission. The system SHALL accept international phone numbers worldwide with standard international dial codes (`+`) or national numbers (7–20 digits), and SHALL NOT restrict, bias, or mandate Philippine-only phone formats in error messages or helper text.
 
 #### Scenario: Valid volunteer application submission
 - **WHEN** an applicant fills out full name, contact information, selects a primary committee, accepts the rules, and clicks submit
@@ -45,3 +45,11 @@ The system SHALL provide an interactive application form collecting applicant de
 #### Scenario: Server-side phone validation enforced
 - **WHEN** an application is submitted to the server action with a phone value that fails the format regex
 - **THEN** the server returns a field-level validation error for `phone` and the record is not created.
+
+#### Scenario: International phone number accepted without country restriction
+- **WHEN** an applicant enters a valid international phone number from any country (such as "+1 202 555 0123", "+44 7911 123456", "+81 90 1234 5678", or "+63 917 123 4567")
+- **THEN** the system accepts the number without error and permits proceeding to the next step.
+
+#### Scenario: Universal phone validation error message
+- **WHEN** an applicant enters an invalid string containing non-numeric junk into the phone or emergency contact phone field
+- **THEN** the system displays a universal error message reading "Please enter a valid phone number with country code (e.g. +1 555 123 4567 or +63 917 123 4567)" without suggesting Philippine-only numbers.

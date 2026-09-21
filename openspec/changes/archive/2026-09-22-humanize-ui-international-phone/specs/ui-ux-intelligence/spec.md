@@ -39,3 +39,8 @@ The user interface SHALL conform to modern high-contrast design tokens, accessib
 - **WHEN** the site is viewed on a wide viewport (1280px+)
 - **THEN** the HeroSection and CommitteeGrid sections show visual fill content in their side margins rather than blank whitespace.
 
+#### Scenario: Event year consistency
+- **WHEN** a user navigates any page of the volunteer portal (landing, hero, about, faq, rules, and footer)
+- **THEN** all brand references prominently designate the event as "Arduino Day Philippines 2027" and "Volunteer Portal 2027".
+
+

@@ -12,15 +12,23 @@ The workspace SHALL provide the complete `ui-ux-pro-max` skill package within `.
 - **THEN** the script returns verified JSON recommendations matching the query terms without crashing.
 
 ### Requirement: Arduino Day Philippines branding and responsive tokens
-The user interface SHALL conform to modern high-contrast design tokens, accessible touch target sizes (minimum 44×44px), and responsive mobile-first layouts. The hero section layout SHALL use a non-overlapping two-column grid at the `lg:` breakpoint (≥1024px): the main headline and supporting content in the primary column, and the supplementary stats panel in a secondary column. At viewports below `lg:`, the stats panel SHALL be hidden. The stats panel SHALL NOT use absolute positioning relative to the hero content that can cause overlap with the headline text at any supported viewport width. The centralized login page and portal navigation SHALL use consistent design system tokens for background, border, and typography supporting dark and light themes, and navigation elements SHALL present a neutral "Sign In" label. All public event headings, navigation headers, badges, and metadata SHALL consistently state the event edition as "Arduino Day Philippines 2027".
+The user interface SHALL conform to modern high-contrast design tokens, accessible touch target sizes (minimum 44x44px), and responsive mobile-first layouts. The visual design and written content SHALL adhere to human-crafted, authentic Arduino aesthetic standards and No AI Slop principles: eliminating oversized blurred radial glow orbs, pulsating decorative badges, rainbow gradient text clips, and hyperbolic AI marketing copy in favor of clean technical structure, grounded typography, authentic Arduino teal branding, and clear, practical event logistics.
 
 #### Scenario: Mobile viewport responsiveness
-- **WHEN** the volunteer application, centralized login page, or organizer dashboard is viewed on a mobile viewport (375px width)
+- **WHEN** the volunteer application or organizer dashboard is viewed on a mobile viewport (375px width)
 - **THEN** the layout renders without horizontal scrollbars, form controls remain easily tappable, and typography remains readable.
 
 #### Scenario: Accessible form focus and feedback
-- **WHEN** an applicant or user navigates using keyboard tab controls
+- **WHEN** an applicant or organizer navigates using keyboard tab controls
 - **THEN** all interactive form inputs and action buttons display distinct, high-contrast focus rings.
+
+#### Scenario: Absence of generic AI visual clichés
+- **WHEN** a user navigates the landing page, form, or sign-in views
+- **THEN** the page renders without decorative blur spheres (`blur-3xl`), pulsating badges (`animate-pulse`), or multicolored gradient text clips.
+
+#### Scenario: Authentic grounded event presentation and human copy
+- **WHEN** an applicant reviews the event overview, committee descriptions, and volunteer conduct guidelines
+- **THEN** the copy avoids AI filler and buzzwords (such as "delve", "foster", "vital role", "driving force", "highest impact", or "build the future"), communicating direct, factual information about the event schedule, shift hours, and committee duties.
 
 #### Scenario: Hero stats panel does not overlap headline at 1024px–1279px
 - **WHEN** a user views the hero section at a viewport width between 1024px and 1279px (the `lg` to `xl` range)
