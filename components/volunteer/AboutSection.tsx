@@ -2,7 +2,23 @@
 
 import React from 'react'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import { Users, Cpu, BookOpen, MapPin, Calendar, Clock, ExternalLink, Sparkles, Radio } from 'lucide-react'
+
+const ArduinoBoardCanvas = dynamic(
+  () => import('./ArduinoBoardCanvas').then((mod) => mod.ArduinoBoardCanvas),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full min-h-[320px] flex flex-col items-center justify-center gap-2">
+        <div className="w-10 h-10 rounded-full border-2 border-[#00979D] border-t-transparent animate-spin" />
+        <span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+          Preparing 3D Canvas...
+        </span>
+      </div>
+    ),
+  }
+)
 
 const PILLARS = [
   {
@@ -181,6 +197,87 @@ export function AboutSection() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Interactive 3D Arduino Hardware Inspection Card */}
+        <div
+          className="rounded-2xl border p-6 sm:p-8 lg:p-10 mb-16 relative overflow-hidden"
+          style={{
+            background: 'var(--bg-card)',
+            borderColor: 'var(--border-base)',
+          }}
+        >
+          {/* Subtle decorative grid background glow */}
+          <div
+            className="absolute -right-20 -top-20 w-80 h-80 rounded-full blur-3xl pointer-events-none"
+            style={{
+              background: 'radial-gradient(circle, rgba(0,151,157,0.12) 0%, transparent 70%)',
+            }}
+            aria-hidden="true"
+          />
+
+          <div className="max-w-3xl mb-6">
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-md border text-xs font-mono mb-3"
+              style={{
+                background: 'var(--bg-base)',
+                borderColor: 'var(--border-base)',
+                color: 'var(--brand-teal)',
+              }}
+            >
+              <Cpu className="w-3.5 h-3.5 text-[#00979D]" />
+              <span>OFFICIAL HARDWARE // INTERACTIVE 3D INSPECTION</span>
+            </div>
+            <h3
+              className="text-2xl sm:text-3xl font-bold tracking-tight mb-3"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              The Heart of Open-Source Making
+            </h3>
+            <p
+              className="text-sm sm:text-base leading-relaxed"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              Arduino Day is powered by hands-on engineering. Explore the official 3D model of the Arduino microcontroller board below—drag to rotate 360°, inspect the onboard components, and view the physical architecture that powers maker innovation.
+            </p>
+          </div>
+
+          {/* 3D WebGL Canvas */}
+          <div
+            className="rounded-xl border p-2 sm:p-4 mb-6 shadow-inner overflow-hidden"
+            style={{
+              background: 'var(--bg-base)',
+              borderColor: 'var(--border-base)',
+            }}
+          >
+            <ArduinoBoardCanvas />
+          </div>
+
+          {/* Quick Hardware Specs */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+            {[
+              { label: 'Microcontroller', value: 'ATmega328P' },
+              { label: 'Clock Speed', value: '16 MHz' },
+              { label: 'Digital I/O', value: '14 Pins (6 PWM)' },
+              { label: 'Operating Voltage', value: '5V DC' },
+            ].map((spec, idx) => (
+              <div
+                key={idx}
+                className="p-3 rounded-lg border text-left"
+                style={{
+                  background: 'var(--bg-base)',
+                  borderColor: 'var(--border-base)',
+                }}
+              >
+                <div className="text-[11px] font-mono uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                  {spec.label}
+                </div>
+                <div className="text-sm font-semibold mt-0.5" style={{ color: 'var(--text-primary)' }}>
+                  {spec.value}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
