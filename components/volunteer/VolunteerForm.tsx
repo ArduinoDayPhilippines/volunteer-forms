@@ -27,8 +27,10 @@ import {
   TSHIRT_SIZES,
   VolunteerApplicationFormData,
   volunteerApplicationSchema,
+  PHONE_REGEX,
 } from '@/lib/validations/volunteer'
 import { submitVolunteerApplication } from '@/app/actions/submit-application'
+import { CertificateGenerator } from './CertificateGenerator'
 
 type FormStep = 1 | 2 | 3 | 4
 
@@ -99,8 +101,9 @@ export function VolunteerForm({
 
       if (!formData.phone.trim()) {
         newErrors.phone = 'Contact number is required'
-      } else if (formData.phone.trim().length < 7) {
-        newErrors.phone = 'Please enter a valid phone number'
+      } else if (!PHONE_REGEX.test(formData.phone.trim())) {
+        newErrors.phone =
+          'Please enter a valid phone number with country code (e.g. +1 555 123 4567 or +63 917 123 4567)'
       }
     }
 
@@ -146,6 +149,9 @@ export function VolunteerForm({
       }
       if (!formData.emergencyContactPhone.trim()) {
         newErrors.emergencyContactPhone = 'Emergency contact phone is required'
+      } else if (!PHONE_REGEX.test(formData.emergencyContactPhone.trim())) {
+        newErrors.emergencyContactPhone =
+          'Please enter a valid phone number with country code (e.g. +1 555 123 4567 or +63 917 123 4567)'
       }
       if (!formData.agreedToRules) {
         newErrors.agreedToRules =
@@ -248,28 +254,40 @@ export function VolunteerForm({
       (c) => c.id === formData.primaryCommitteeId
     )
 
+    const issuedDate = new Date().toLocaleDateString('en-PH', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+
     return (
-      <div className="max-w-2xl mx-auto p-6 sm:p-10 rounded-3xl bg-slate-900/90 border border-[#00979c]/40 shadow-2xl text-center backdrop-blur-xl">
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#00979c] to-[#00e5ff] flex items-center justify-center mx-auto mb-6 shadow-lg shadow-[#00979c]/30">
-          <CheckCircle2 className="w-9 h-9 text-slate-950 stroke-[2.5]" />
+      <div
+        className="max-w-2xl mx-auto p-6 sm:p-10 rounded-2xl border text-center"
+        style={{ background: 'var(--bg-card)', borderColor: 'var(--border-base)' }}
+      >
+        <div className="w-16 h-16 rounded-xl bg-[#00979D] flex items-center justify-center mx-auto mb-6 text-white shadow-sm">
+          <CheckCircle2 className="w-9 h-9 stroke-[2.5]" />
         </div>
 
-        <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+        <h3 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
           Application Received!
         </h3>
-        <p className="text-slate-300 text-sm sm:text-base max-w-md mx-auto mb-8">
-          Mabuhay, <span className="text-[#00e5ff] font-semibold">{submissionResult.applicantName}</span>! Your volunteer application for Arduino Day Philippines 2026 has been submitted to the organizing committee.
+        <p className="text-base sm:text-lg max-w-md mx-auto mb-8" style={{ color: 'var(--text-secondary)' }}>
+          Mabuhay, <span className="text-[#00979D] font-semibold">{submissionResult.applicantName}</span>! Your volunteer application for Arduino Day Philippines 2026 has been submitted to the organizing committee.
         </p>
 
         {/* Reference ID card */}
-        <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 text-left mb-8">
+        <div
+          className="p-5 rounded-xl border text-left mb-8"
+          style={{ background: 'var(--bg-base)', borderColor: 'var(--border-base)' }}
+        >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
               Application Reference ID
             </span>
             <button
               onClick={copyApplicationId}
-              className="inline-flex items-center gap-1.5 text-xs text-[#00e5ff] hover:text-[#00979c] font-medium transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs text-[#00979D] hover:text-[#008184] font-medium transition-colors cursor-pointer"
             >
               {copied ? (
                 <>
@@ -284,48 +302,65 @@ export function VolunteerForm({
               )}
             </button>
           </div>
-          <p className="font-mono text-sm sm:text-base text-white break-all select-all">
+          <p className="font-mono text-sm sm:text-base break-all select-all" style={{ color: 'var(--text-primary)' }}>
             {submissionResult.applicationId}
           </p>
-          <div className="mt-4 pt-3 border-t border-slate-800/80 flex flex-wrap gap-y-2 justify-between text-xs text-slate-400">
+          <div
+            className="mt-4 pt-3 border-t flex flex-wrap gap-y-2 justify-between text-sm"
+            style={{ borderColor: 'var(--border-muted)', color: 'var(--text-muted)' }}
+          >
             <div>
-              <span className="text-slate-500">Primary Committee: </span>
-              <span className="text-slate-200 font-medium">
+              <span style={{ color: 'var(--text-muted)' }}>Primary Committee: </span>
+              <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>
                 {chosenCommittee?.name || formData.primaryCommitteeId}
               </span>
             </div>
             <div>
-              <span className="text-slate-500">Email: </span>
-              <span className="text-slate-200 font-medium">{formData.email}</span>
+              <span style={{ color: 'var(--text-muted)' }}>Email: </span>
+              <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>{formData.email}</span>
             </div>
           </div>
         </div>
 
+        {/* Certificate Generator */}
+        <CertificateGenerator
+          applicantName={submissionResult.applicantName}
+          committeeName={chosenCommittee?.name || formData.primaryCommitteeId}
+          applicationId={submissionResult.applicationId}
+          issuedDate={issuedDate}
+        />
+
         {/* What happens next timeline */}
-        <div className="text-left space-y-4 mb-8 p-5 rounded-2xl bg-slate-950/60 border border-slate-800">
-          <h4 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#00e5ff]" />
+        <div
+          className="text-left space-y-4 mt-8 mb-8 p-5 rounded-xl border"
+          style={{ background: 'var(--bg-base)', borderColor: 'var(--border-base)' }}
+        >
+          <h4 className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
+            <Sparkles className="w-4 h-4 text-[#00979D]" />
             <span>Next Steps in the Recruitment Process</span>
           </h4>
-          <ol className="relative border-l border-slate-800 ml-3 space-y-4 text-xs sm:text-sm text-slate-400">
+          <ol
+            className="relative border-l ml-3 space-y-4 text-sm"
+            style={{ borderColor: 'var(--border-base)', color: 'var(--text-muted)' }}
+          >
             <li className="ml-4">
-              <div className="absolute w-2 h-2 rounded-full bg-[#00979c] -left-1 top-1.5" />
-              <span className="font-medium text-slate-200">1. Committee Review</span>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <div className="absolute w-2 h-2 rounded-full bg-[#00979D] -left-1 top-1.5" />
+              <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>1. Committee Review</span>
+              <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
                 Committee leads review applications within 3–5 business days based on capacity and maker preferences.
               </p>
             </li>
             <li className="ml-4">
-              <div className="absolute w-2 h-2 rounded-full bg-slate-700 -left-1 top-1.5" />
-              <span className="font-medium text-slate-200">2. Virtual Interview / Screening</span>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <div className="absolute w-2 h-2 rounded-full -left-1 top-1.5" style={{ background: 'var(--border-base)' }} />
+              <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>2. Virtual Interview / Screening</span>
+              <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
                 Shortlisted applicants will receive an email invite to a 10-minute discovery sync.
               </p>
             </li>
             <li className="ml-4">
-              <div className="absolute w-2 h-2 rounded-full bg-slate-700 -left-1 top-1.5" />
-              <span className="font-medium text-slate-200">3. General Volunteer Orientation</span>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <div className="absolute w-2 h-2 rounded-full -left-1 top-1.5" style={{ background: 'var(--border-base)' }} />
+              <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>3. General Volunteer Orientation</span>
+              <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
                 Official onboarding, safety walkthrough, and swag kit distribution.
               </p>
             </li>
@@ -334,7 +369,8 @@ export function VolunteerForm({
 
         <button
           onClick={resetForm}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-sm transition-colors cursor-pointer"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border font-medium text-base transition-colors hover:border-[#00979D] hover:text-[#00979D] cursor-pointer"
+          style={{ background: 'var(--bg-card)', borderColor: 'var(--border-base)', color: 'var(--text-secondary)' }}
         >
           <RotateCcw className="w-4 h-4" />
           <span>Submit Another Application</span>
@@ -356,9 +392,12 @@ export function VolunteerForm({
       {/* Step Header Indicator */}
       <div className="mb-8">
         <div className="flex items-center justify-between relative">
-          <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-slate-800 -translate-y-1/2 z-0" />
           <div
-            className="absolute top-1/2 left-0 h-0.5 bg-[#00979c] -translate-y-1/2 z-0 transition-all duration-300"
+            className="absolute top-1/2 left-0 right-0 h-0.5 -translate-y-1/2 z-0"
+            style={{ background: 'var(--border-base)' }}
+          />
+          <div
+            className="absolute top-1/2 left-0 h-0.5 bg-[#00979D] -translate-y-1/2 z-0 transition-all duration-300"
             style={{
               width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
             }}
@@ -377,24 +416,30 @@ export function VolunteerForm({
                       setCurrentStep(s.number as FormStep)
                     }
                   }}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all ${
+                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all border ${
                     isCompleted
-                      ? 'bg-[#00979c] text-white'
+                      ? 'bg-[#00979D] text-white border-[#00979D]'
                       : isCurrent
-                      ? 'bg-[#00e5ff] text-slate-950 ring-4 ring-[#00979c]/30 shadow-lg shadow-[#00979c]/30'
-                      : 'bg-slate-800 text-slate-400 border border-slate-700'
+                      ? 'bg-[#00979D] text-white border-[#00979D] ring-4 ring-[#00979D]/20 shadow-sm'
+                      : 'border-[var(--border-base)]'
                   }`}
+                  style={
+                    !isCompleted && !isCurrent
+                      ? { background: 'var(--bg-card)', color: 'var(--text-muted)', borderColor: 'var(--border-base)' }
+                      : undefined
+                  }
                 >
                   {isCompleted ? <Check className="w-5 h-5 stroke-[2.5]" /> : s.number}
                 </button>
                 <span
-                  className={`mt-2 text-xs font-medium hidden sm:inline ${
-                    isCurrent
-                      ? 'text-[#00e5ff]'
+                  className="mt-2 text-xs font-medium hidden sm:inline"
+                  style={{
+                    color: isCurrent
+                      ? '#00979D'
                       : isCompleted
-                      ? 'text-slate-300'
-                      : 'text-slate-500'
-                  }`}
+                      ? 'var(--text-secondary)'
+                      : 'var(--text-muted)',
+                  }}
                 >
                   {s.title}
                 </span>
@@ -405,7 +450,10 @@ export function VolunteerForm({
       </div>
 
       {/* Form Card */}
-      <div className="rounded-3xl bg-slate-900/80 border border-slate-800 p-6 sm:p-10 shadow-2xl backdrop-blur-xl">
+      <div
+        className="rounded-2xl border p-6 sm:p-10"
+        style={{ background: 'var(--bg-card)', borderColor: 'var(--border-base)' }}
+      >
         {/* Error notification banner */}
         {serverError && (
           <div className="mb-6 p-4 rounded-xl bg-red-950/70 border border-red-800 text-red-200 flex items-start gap-3 text-sm">
@@ -422,21 +470,21 @@ export function VolunteerForm({
           {currentStep === 1 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-1">
+                <h3 className="text-xl sm:text-2xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>
                   Personal Information
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400">
+                <p className="text-sm sm:text-base" style={{ color: 'var(--text-muted)' }}>
                   Tell us a bit about yourself so the volunteer leads can reach you.
                 </p>
               </div>
 
               {/* Full Name */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-2">
-                  Full Name <span className="text-[#e47128]">*</span>
+                <label className="block text-base font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
+                  Full Name <span className="text-[#F26727]">*</span>
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none" style={{ color: 'var(--text-muted)' }}>
                     <User className="w-5 h-5" />
                   </div>
                   <input
@@ -447,11 +495,16 @@ export function VolunteerForm({
                       setFormData({ ...formData, fullName: e.target.value })
                     }
                     placeholder="e.g. Maria Santos"
-                    className={`w-full pl-11 pr-4 py-3 rounded-xl bg-slate-950/90 border text-white placeholder-slate-500 text-sm sm:text-base focus:outline-none transition-all ${
+                    className={`w-full pl-11 pr-4 py-3 rounded-lg border text-sm sm:text-base focus:outline-none transition-all ${
                       errors.fullName
-                        ? 'border-red-500 focus:ring-2 focus:ring-red-500'
-                        : 'border-slate-800 focus:border-[#00979c] focus:ring-2 focus:ring-[#00979c]/30'
+                        ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
+                        : 'focus:border-[#00979D] focus:ring-2 focus:ring-[#00979D]/20'
                     }`}
+                    style={{
+                      background: 'var(--form-bg)',
+                      borderColor: errors.fullName ? undefined : 'var(--form-border)',
+                      color: 'var(--text-primary)',
+                    }}
                   />
                 </div>
                 {errors.fullName && (
@@ -464,11 +517,11 @@ export function VolunteerForm({
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-2">
-                  Email Address <span className="text-[#e47128]">*</span>
+                <label className="block text-base font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
+                  Email Address <span className="text-[#F26727]">*</span>
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none" style={{ color: 'var(--text-muted)' }}>
                     <Mail className="w-5 h-5" />
                   </div>
                   <input
@@ -479,11 +532,16 @@ export function VolunteerForm({
                       setFormData({ ...formData, email: e.target.value })
                     }
                     placeholder="maria.santos@example.com"
-                    className={`w-full pl-11 pr-4 py-3 rounded-xl bg-slate-950/90 border text-white placeholder-slate-500 text-sm sm:text-base focus:outline-none transition-all ${
+                    className={`w-full pl-11 pr-4 py-3 rounded-lg border text-sm sm:text-base focus:outline-none transition-all ${
                       errors.email
-                        ? 'border-red-500 focus:ring-2 focus:ring-red-500'
-                        : 'border-slate-800 focus:border-[#00979c] focus:ring-2 focus:ring-[#00979c]/30'
+                        ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
+                        : 'focus:border-[#00979D] focus:ring-2 focus:ring-[#00979D]/20'
                     }`}
+                    style={{
+                      background: 'var(--form-bg)',
+                      borderColor: errors.email ? undefined : 'var(--form-border)',
+                      color: 'var(--text-primary)',
+                    }}
                   />
                 </div>
                 {errors.email && (
@@ -496,11 +554,11 @@ export function VolunteerForm({
 
               {/* Phone */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-2">
-                  Mobile Phone Number <span className="text-[#e47128]">*</span>
+                <label className="block text-base font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
+                  Phone Number <span className="text-[#F26727]">*</span>
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none" style={{ color: 'var(--text-muted)' }}>
                     <Phone className="w-5 h-5" />
                   </div>
                   <input
@@ -510,14 +568,22 @@ export function VolunteerForm({
                     onChange={(e) =>
                       setFormData({ ...formData, phone: e.target.value })
                     }
-                    placeholder="+63 912 345 6789"
-                    className={`w-full pl-11 pr-4 py-3 rounded-xl bg-slate-950/90 border text-white placeholder-slate-500 text-sm sm:text-base focus:outline-none transition-all ${
+                    placeholder="+1 555 123 4567 or +63 917 123 4567"
+                    className={`w-full pl-11 pr-4 py-3 rounded-lg border text-sm sm:text-base focus:outline-none transition-all ${
                       errors.phone
-                        ? 'border-red-500 focus:ring-2 focus:ring-red-500'
-                        : 'border-slate-800 focus:border-[#00979c] focus:ring-2 focus:ring-[#00979c]/30'
+                        ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
+                        : 'focus:border-[#00979D] focus:ring-2 focus:ring-[#00979D]/20'
                     }`}
+                    style={{
+                      background: 'var(--form-bg)',
+                      borderColor: errors.phone ? undefined : 'var(--form-border)',
+                      color: 'var(--text-primary)',
+                    }}
                   />
                 </div>
+                <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+                  International numbers welcome. Include your country code (e.g. +1, +44, +81, +63).
+                </p>
                 {errors.phone && (
                   <p className="mt-1.5 text-xs text-red-400 flex items-center gap-1">
                     <AlertCircle className="w-3.5 h-3.5" />
@@ -528,12 +594,12 @@ export function VolunteerForm({
 
               {/* Organization or School */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-2">
+                <label className="block text-base font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
                   University / Company / Maker Organization{' '}
-                  <span className="text-xs text-slate-400 font-normal">(Optional)</span>
+                  <span className="text-xs font-normal" style={{ color: 'var(--text-muted)' }}>(Optional)</span>
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none" style={{ color: 'var(--text-muted)' }}>
                     <Building2 className="w-5 h-5" />
                   </div>
                   <input
@@ -543,7 +609,12 @@ export function VolunteerForm({
                       setFormData({ ...formData, organizationOrSchool: e.target.value })
                     }
                     placeholder="e.g. Polytechnic University of the Philippines / MakerLab PH"
-                    className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-950/90 border border-slate-800 text-white placeholder-slate-500 text-sm sm:text-base focus:outline-none focus:border-[#00979c] focus:ring-2 focus:ring-[#00979c]/30 transition-all"
+                    className="w-full pl-11 pr-4 py-3 rounded-lg border text-sm sm:text-base focus:outline-none focus:border-[#00979D] focus:ring-2 focus:ring-[#00979D]/20 transition-all"
+                    style={{
+                      background: 'var(--form-bg)',
+                      borderColor: 'var(--form-border)',
+                      color: 'var(--text-primary)',
+                    }}
                   />
                 </div>
               </div>
@@ -554,18 +625,18 @@ export function VolunteerForm({
           {currentStep === 2 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-1">
+                <h3 className="text-xl sm:text-2xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>
                   Committee Preferences
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400">
+                <p className="text-sm sm:text-base" style={{ color: 'var(--text-muted)' }}>
                   Select your primary committee choice and an optional backup team.
                 </p>
               </div>
 
               {/* Primary Committee */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-2">
-                  Primary Committee Preference <span className="text-[#e47128]">*</span>
+                <label className="block text-base font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
+                  Primary Committee Preference <span className="text-[#F26727]">*</span>
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {committees.map((committee) => {
@@ -580,25 +651,29 @@ export function VolunteerForm({
                             primaryCommitteeId: committee.id,
                           })
                         }
-                        className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
-                          isSelected
-                            ? 'bg-[#00979c]/20 border-[#00e5ff] shadow-lg shadow-[#00979c]/20 ring-1 ring-[#00e5ff]'
-                            : 'bg-slate-950/80 border-slate-800 hover:border-slate-700'
+                        className={`p-4 rounded-xl border text-left transition-colors cursor-pointer flex flex-col justify-between ${
+                          isSelected ? '' : 'hover:border-[#00979D]/40'
                         }`}
+                        style={{
+                          background: isSelected ? 'var(--brand-teal-surface)' : 'var(--bg-card)',
+                          borderColor: isSelected ? '#00979D' : 'var(--border-base)',
+                        }}
                       >
                         <div className="flex items-center justify-between mb-2">
                           <span
-                            className={`text-sm font-bold ${
-                              isSelected ? 'text-[#00e5ff]' : 'text-white'
-                            }`}
+                            className="text-sm font-bold"
+                            style={{ color: isSelected ? '#00979D' : 'var(--text-primary)' }}
                           >
                             {committee.name}
                           </span>
                           {isSelected && (
-                            <Check className="w-4 h-4 text-[#00e5ff]" />
+                            <Check className="w-4 h-4 text-[#00979D]" />
                           )}
                         </div>
-                        <p className="text-xs text-slate-400 line-clamp-2">
+                        <p
+                          className="text-xs line-clamp-2"
+                          style={{ color: isSelected ? 'var(--text-secondary)' : 'var(--text-muted)' }}
+                        >
                           {committee.description}
                         </p>
                       </button>
@@ -615,9 +690,9 @@ export function VolunteerForm({
 
               {/* Secondary Committee */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-2">
+                <label className="block text-base font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
                   Secondary Committee Preference{' '}
-                  <span className="text-xs text-slate-400 font-normal">
+                  <span className="text-xs font-normal" style={{ color: 'var(--text-muted)' }}>
                     (Optional Alternate)
                   </span>
                 </label>
@@ -629,7 +704,12 @@ export function VolunteerForm({
                       secondaryCommitteeId: e.target.value || null,
                     })
                   }
-                  className="w-full px-4 py-3 rounded-xl bg-slate-950/90 border border-slate-800 text-white text-sm sm:text-base focus:outline-none focus:border-[#00979c] focus:ring-2 focus:ring-[#00979c]/30 transition-all"
+                  className="w-full px-4 py-3 rounded-lg border text-sm sm:text-base focus:outline-none focus:border-[#00979D] focus:ring-2 focus:ring-[#00979D]/20 transition-all"
+                  style={{
+                    background: 'var(--form-bg)',
+                    borderColor: 'var(--form-border)',
+                    color: 'var(--text-primary)',
+                  }}
                 >
                   <option value="">-- None / No secondary preference --</option>
                   {committees
@@ -654,17 +734,17 @@ export function VolunteerForm({
           {currentStep === 3 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-1">
+                <h3 className="text-xl sm:text-2xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>
                   Hardware &amp; Maker Skills
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400">
+                <p className="text-sm sm:text-base" style={{ color: 'var(--text-muted)' }}>
                   Help us match you with hands-on tasks and workshop mentorship roles.
                 </p>
               </div>
 
               {/* Hardware Skills Checklist */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-3">
+                <label className="block text-base font-medium mb-3" style={{ color: 'var(--text-secondary)' }}>
                   Check all hardware &amp; maker areas you have experience with:
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -673,11 +753,12 @@ export function VolunteerForm({
                     return (
                       <label
                         key={opt}
-                        className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all cursor-pointer select-none ${
-                          isChecked
-                            ? 'bg-[#00979c]/15 border-[#00979c] text-white'
-                            : 'bg-slate-950/70 border-slate-800 text-slate-300 hover:border-slate-700'
-                        }`}
+                        className="flex items-center gap-3 p-3.5 rounded-xl border transition-colors cursor-pointer select-none"
+                        style={{
+                          background: isChecked ? 'var(--brand-teal-surface)' : 'var(--bg-card)',
+                          borderColor: isChecked ? '#00979D' : 'var(--border-base)',
+                          color: isChecked ? 'var(--text-primary)' : 'var(--text-secondary)',
+                        }}
                       >
                         <input
                           type="checkbox"
@@ -688,8 +769,8 @@ export function VolunteerForm({
                         <div
                           className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${
                             isChecked
-                              ? 'bg-[#00979c] text-white'
-                              : 'border border-slate-700 bg-slate-900'
+                              ? 'bg-[#00979D] text-white'
+                              : 'border border-[var(--border-base)] bg-[var(--bg-base)]'
                           }`}
                         >
                           {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -703,9 +784,9 @@ export function VolunteerForm({
 
               {/* Maker Experience Details */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-2">
+                <label className="block text-base font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
                   Maker Projects or Hardware Demos{' '}
-                  <span className="text-xs text-slate-400 font-normal">
+                  <span className="text-sm font-normal" style={{ color: 'var(--text-muted)' }}>
                     (Optional highlights)
                   </span>
                 </label>
@@ -716,15 +797,20 @@ export function VolunteerForm({
                     setFormData({ ...formData, makerExperienceDetails: e.target.value })
                   }
                   placeholder="Share a brief overview of any electronics, robotics, or IoT projects you've built or mentored..."
-                  className="w-full p-4 rounded-xl bg-slate-950/90 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#00979c] focus:ring-2 focus:ring-[#00979c]/30 transition-all resize-none"
+                  className="w-full p-4 rounded-lg border text-sm focus:outline-none focus:border-[#00979D] focus:ring-2 focus:ring-[#00979D]/20 transition-all resize-none"
+                  style={{
+                    background: 'var(--form-bg)',
+                    borderColor: 'var(--form-border)',
+                    color: 'var(--text-primary)',
+                  }}
                 />
               </div>
 
               {/* Past Volunteer Experience */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-2">
+                <label className="block text-base font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
                   Past Event / Community Volunteer Experience{' '}
-                  <span className="text-xs text-slate-400 font-normal">(Optional)</span>
+                  <span className="text-sm font-normal" style={{ color: 'var(--text-muted)' }}>(Optional)</span>
                 </label>
                 <textarea
                   rows={2}
@@ -733,7 +819,12 @@ export function VolunteerForm({
                     setFormData({ ...formData, pastVolunteerExperience: e.target.value })
                   }
                   placeholder="e.g. Hackathons, tech conferences, student organization events..."
-                  className="w-full p-4 rounded-xl bg-slate-950/90 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#00979c] focus:ring-2 focus:ring-[#00979c]/30 transition-all resize-none"
+                  className="w-full p-4 rounded-lg border text-sm focus:outline-none focus:border-[#00979D] focus:ring-2 focus:ring-[#00979D]/20 transition-all resize-none"
+                  style={{
+                    background: 'var(--form-bg)',
+                    borderColor: 'var(--form-border)',
+                    color: 'var(--text-primary)',
+                  }}
                 />
               </div>
             </div>
@@ -743,18 +834,18 @@ export function VolunteerForm({
           {currentStep === 4 && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-1">
+                <h3 className="text-xl sm:text-2xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>
                   Logistics &amp; Confirmation
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400">
+                <p className="text-sm sm:text-base" style={{ color: 'var(--text-muted)' }}>
                   Final details to prepare your volunteer badge, shirt, and shift schedule.
                 </p>
               </div>
 
               {/* Availability */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-3">
-                  Availability Slots <span className="text-[#e47128]">*</span>
+                <label className="block text-base font-medium mb-3" style={{ color: 'var(--text-secondary)' }}>
+                  Availability Slots <span className="text-[#F26727]">*</span>
                 </label>
                 <div className="space-y-2.5">
                   {AVAILABILITY_OPTIONS.map((slot) => {
@@ -762,11 +853,12 @@ export function VolunteerForm({
                     return (
                       <label
                         key={slot.id}
-                        className={`flex items-start gap-3 p-3.5 rounded-xl border transition-all cursor-pointer select-none ${
-                          isChecked
-                            ? 'bg-[#00979c]/15 border-[#00979c] text-white'
-                            : 'bg-slate-950/70 border-slate-800 text-slate-300 hover:border-slate-700'
-                        }`}
+                        className="flex items-start gap-3 p-3.5 rounded-xl border transition-colors cursor-pointer select-none"
+                        style={{
+                          background: isChecked ? 'var(--brand-teal-surface)' : 'var(--bg-card)',
+                          borderColor: isChecked ? '#00979D' : 'var(--border-base)',
+                          color: isChecked ? 'var(--text-primary)' : 'var(--text-secondary)',
+                        }}
                       >
                         <input
                           type="checkbox"
@@ -777,8 +869,8 @@ export function VolunteerForm({
                         <div
                           className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                             isChecked
-                              ? 'bg-[#00979c] text-white'
-                              : 'border border-slate-700 bg-slate-900'
+                              ? 'bg-[#00979D] text-white'
+                              : 'border border-[var(--border-base)] bg-[var(--bg-base)]'
                           }`}
                         >
                           {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -800,9 +892,9 @@ export function VolunteerForm({
 
               {/* T-Shirt Sizing */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-2">
+                <label className="block text-base font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
                   Official Volunteer T-Shirt Size{' '}
-                  <span className="text-[#e47128]">*</span>
+                  <span className="text-[#F26727]">*</span>
                 </label>
                 <div className="flex flex-wrap gap-2.5">
                   {TSHIRT_SIZES.map((size) => {
@@ -812,11 +904,20 @@ export function VolunteerForm({
                         key={size}
                         type="button"
                         onClick={() => setFormData({ ...formData, tshirtSize: size })}
-                        className={`min-w-[48px] h-11 px-4 rounded-xl font-bold text-sm transition-all cursor-pointer flex items-center justify-center ${
+                        className={`min-w-[48px] h-11 px-4 rounded-lg font-bold text-sm transition-colors cursor-pointer flex items-center justify-center border ${
                           isSelected
-                            ? 'bg-[#00979c] text-white shadow-md shadow-[#00979c]/30'
-                            : 'bg-slate-950 border border-slate-800 text-slate-300 hover:border-slate-700'
+                            ? 'bg-[#00979D] text-white border-[#00979D] shadow-sm'
+                            : 'hover:border-[#00979D]/50'
                         }`}
+                        style={
+                          !isSelected
+                            ? {
+                                background: 'var(--bg-card)',
+                                borderColor: 'var(--border-base)',
+                                color: 'var(--text-secondary)',
+                              }
+                            : undefined
+                        }
                       >
                         {size}
                       </button>
@@ -828,8 +929,8 @@ export function VolunteerForm({
               {/* Emergency Contact */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-200 mb-2">
-                    Emergency Contact Name <span className="text-[#e47128]">*</span>
+                  <label className="block text-base font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
+                    Emergency Contact Name <span className="text-[#F26727]">*</span>
                   </label>
                   <input
                     type="text"
@@ -839,11 +940,16 @@ export function VolunteerForm({
                       setFormData({ ...formData, emergencyContactName: e.target.value })
                     }
                     placeholder="Parent / Guardian / Spouse"
-                    className={`w-full px-4 py-3 rounded-xl bg-slate-950/90 border text-white text-sm focus:outline-none transition-all ${
+                    className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none transition-all ${
                       errors.emergencyContactName
-                        ? 'border-red-500'
-                        : 'border-slate-800 focus:border-[#00979c]'
+                        ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
+                        : 'focus:border-[#00979D] focus:ring-2 focus:ring-[#00979D]/20'
                     }`}
+                    style={{
+                      background: 'var(--form-bg)',
+                      borderColor: errors.emergencyContactName ? undefined : 'var(--form-border)',
+                      color: 'var(--text-primary)',
+                    }}
                   />
                   {errors.emergencyContactName && (
                     <p className="mt-1 text-xs text-red-400">
@@ -853,8 +959,8 @@ export function VolunteerForm({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-200 mb-2">
-                    Emergency Contact Phone <span className="text-[#e47128]">*</span>
+                  <label className="block text-base font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
+                    Emergency Contact Phone <span className="text-[#F26727]">*</span>
                   </label>
                   <input
                     type="tel"
@@ -866,13 +972,21 @@ export function VolunteerForm({
                         emergencyContactPhone: e.target.value,
                       })
                     }
-                    placeholder="+63 912 345 6789"
-                    className={`w-full px-4 py-3 rounded-xl bg-slate-950/90 border text-white text-sm focus:outline-none transition-all ${
+                    placeholder="+1 555 123 4567 or +63 917 123 4567"
+                    className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none transition-all ${
                       errors.emergencyContactPhone
-                        ? 'border-red-500'
-                        : 'border-slate-800 focus:border-[#00979c]'
+                        ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
+                        : 'focus:border-[#00979D] focus:ring-2 focus:ring-[#00979D]/20'
                     }`}
+                    style={{
+                      background: 'var(--form-bg)',
+                      borderColor: errors.emergencyContactPhone ? undefined : 'var(--form-border)',
+                      color: 'var(--text-primary)',
+                    }}
                   />
+                  <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+                    Include country code for international contacts.
+                  </p>
                   {errors.emergencyContactPhone && (
                     <p className="mt-1 text-xs text-red-400">
                       {errors.emergencyContactPhone}
@@ -882,15 +996,17 @@ export function VolunteerForm({
               </div>
 
               {/* Rules & Conduct Acknowledgment */}
-              <div className="pt-4 border-t border-slate-800/80 space-y-3">
+              <div className="pt-4 border-t space-y-3" style={{ borderColor: 'var(--border-muted)' }}>
                 <label
-                  className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer ${
-                    formData.agreedToRules
-                      ? 'bg-[#00979c]/15 border-[#00979c]'
+                  className="flex items-start gap-3 p-4 rounded-xl border transition-colors cursor-pointer"
+                  style={{
+                    background: formData.agreedToRules ? 'var(--brand-teal-surface)' : 'var(--bg-card)',
+                    borderColor: formData.agreedToRules
+                      ? '#00979D'
                       : errors.agreedToRules
-                      ? 'bg-red-950/20 border-red-500'
-                      : 'bg-slate-950/80 border-slate-800'
-                  }`}
+                      ? '#ef4444'
+                      : 'var(--border-base)',
+                  }}
                 >
                   <input
                     type="checkbox"
@@ -903,14 +1019,14 @@ export function VolunteerForm({
                   <div
                     className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                       formData.agreedToRules
-                        ? 'bg-[#00979c] text-white'
-                        : 'border border-slate-700 bg-slate-900'
+                        ? 'bg-[#00979D] text-white'
+                        : 'border border-[var(--border-base)] bg-[var(--bg-base)]'
                     }`}
                   >
                     {formData.agreedToRules && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                   </div>
-                  <div className="text-xs sm:text-sm text-slate-300">
-                    <span className="font-semibold text-white">
+                  <div className="text-xs sm:text-sm" style={{ color: 'var(--text-secondary)' }}>
+                    <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
                       I have read, understood, and agree to the Arduino Day Philippines Volunteer Rules &amp; Code of Conduct.
                     </span>{' '}
                     I commit to attending the briefing and adhering to safety and inclusivity standards.
@@ -924,7 +1040,10 @@ export function VolunteerForm({
                 )}
 
                 {/* Photo Release */}
-                <label className="flex items-start gap-3 p-3 rounded-xl bg-slate-950/40 border border-slate-800/60 cursor-pointer">
+                <label
+                  className="flex items-start gap-3 p-3 rounded-xl border cursor-pointer"
+                  style={{ background: 'var(--bg-base)', borderColor: 'var(--border-base)' }}
+                >
                   <input
                     type="checkbox"
                     checked={formData.agreedToPhotoRelease}
@@ -939,15 +1058,15 @@ export function VolunteerForm({
                   <div
                     className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                       formData.agreedToPhotoRelease
-                        ? 'bg-[#00979c] text-white'
-                        : 'border border-slate-700 bg-slate-900'
+                        ? 'bg-[#00979D] text-white'
+                        : 'border border-[var(--border-base)] bg-[var(--bg-card)]'
                     }`}
                   >
                     {formData.agreedToPhotoRelease && (
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
                     )}
                   </div>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
                     I consent to being photographed or recorded during event activities for official community recaps and social media archive.
                   </span>
                 </label>
@@ -956,13 +1075,21 @@ export function VolunteerForm({
           )}
 
           {/* Navigation Action Buttons */}
-          <div className="mt-8 pt-6 border-t border-slate-800/80 flex items-center justify-between gap-4">
+          <div
+            className="mt-8 pt-6 border-t flex items-center justify-between gap-4"
+            style={{ borderColor: 'var(--border-muted)' }}
+          >
             {currentStep > 1 ? (
               <button
                 type="button"
                 onClick={handleBack}
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-sm transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border font-medium text-sm transition-colors hover:border-[#00979D] hover:text-[#00979D] cursor-pointer"
+                style={{
+                  background: 'var(--bg-card)',
+                  borderColor: 'var(--border-base)',
+                  color: 'var(--text-secondary)',
+                }}
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back</span>
@@ -975,7 +1102,7 @@ export function VolunteerForm({
               <button
                 type="button"
                 onClick={handleNext}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#00979c] to-[#008184] hover:from-[#008184] hover:to-[#006468] text-white font-semibold text-sm shadow-md shadow-[#00979c]/25 transition-all cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#00979D] hover:bg-[#008184] text-white font-semibold text-sm shadow-sm transition-colors cursor-pointer"
               >
                 <span>Continue</span>
                 <ArrowRight className="w-4 h-4" />
@@ -984,17 +1111,17 @@ export function VolunteerForm({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-[#00e5ff] via-[#00979c] to-[#008184] text-slate-950 font-bold text-sm shadow-lg shadow-[#00979c]/30 hover:opacity-95 transition-all cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-lg bg-[#00979D] hover:bg-[#008184] text-white font-bold text-sm shadow-sm transition-colors cursor-pointer disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     <span>Submitting Application...</span>
                   </>
                 ) : (
                   <>
                     <span>Complete &amp; Submit Application</span>
-                    <Sparkles className="w-4 h-4 text-slate-950" />
+                    <Sparkles className="w-4 h-4 text-white" />
                   </>
                 )}
               </button>

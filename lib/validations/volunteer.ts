@@ -20,6 +20,8 @@ export const AVAILABILITY_OPTIONS = [
 
 export const TSHIRT_SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'] as const
 
+export const PHONE_REGEX = /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{6,19}$/
+
 export const volunteerApplicationSchema = z.object({
   fullName: z
     .string()
@@ -35,7 +37,8 @@ export const volunteerApplicationSchema = z.object({
     .string()
     .trim()
     .min(7, 'Please enter a valid contact phone number')
-    .max(25, 'Phone number is too long'),
+    .max(25, 'Phone number is too long')
+    .regex(PHONE_REGEX, 'Please enter a valid phone number with country code (e.g. +1 555 123 4567 or +63 917 123 4567)'),
   organizationOrSchool: z
     .string()
     .trim()
@@ -81,7 +84,8 @@ export const volunteerApplicationSchema = z.object({
     .string()
     .trim()
     .min(7, 'Emergency contact phone number is required')
-    .max(25, 'Emergency contact phone number is too long'),
+    .max(25, 'Emergency contact phone number is too long')
+    .regex(PHONE_REGEX, 'Please enter a valid phone number with country code (e.g. +1 555 123 4567 or +63 917 123 4567)'),
   agreedToRules: z
     .boolean()
     .refine((val) => val === true, {

@@ -21,17 +21,42 @@ export function CommitteeGrid({
   onSelectCommittee?: (committeeId: string) => void
 }) {
   return (
-    <section id="committees-section" className="py-16 md:py-24 border-t border-slate-800/80">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      id="committees-section"
+      className="py-16 md:py-24 border-t relative overflow-hidden"
+      style={{
+        borderColor: 'var(--border-muted)',
+        /* Subtle dot-grid pattern for lateral fill on wide viewports */
+        backgroundImage:
+          'radial-gradient(circle, var(--border-base) 1.5px, transparent 1.5px)',
+        backgroundSize: '28px 28px',
+        backgroundPosition: 'center',
+      }}
+    >
+      {/* Overlay to keep dot grid subtle and not fight content */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'var(--bg-base)', opacity: 0.85 }}
+        aria-hidden="true"
+      />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-[#00e5ff] mb-3">
-            Committees &amp; Responsibilities
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-md border text-xs font-mono tracking-wider mb-3"
+            style={{
+              background: 'var(--bg-card)',
+              borderColor: 'var(--border-base)',
+              color: '#00979D',
+            }}
+          >
+            <span>// 01. COMMITTEE DIRECTORY</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+            Volunteer Committees &amp; Shift Duties
           </h2>
-          <p className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
-            Find the Team Where You Belong
-          </p>
-          <p className="mt-4 text-slate-400 text-base sm:text-lg">
-            Every volunteer plays a vital role in bringing Arduino Day Philippines to life. Browse our committees to see where your talents can make the highest impact.
+          <p className="mt-3 text-sm sm:text-base max-w-2xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
+            Review the roles below and select your first and second committee preferences in the application form.
           </p>
         </div>
 
@@ -41,34 +66,43 @@ export function CommitteeGrid({
             return (
               <div
                 key={committee.id}
-                className="group relative flex flex-col justify-between rounded-2xl bg-slate-900/70 border border-slate-800 p-6 sm:p-7 hover:border-[#00979c]/50 transition-all duration-200 hover:shadow-xl hover:shadow-[#00979c]/10"
+                className="group relative flex flex-col justify-between rounded-xl border p-6 sm:p-7 hover:border-[#00979D] transition-colors"
+                style={{ background: 'var(--bg-card)', borderColor: 'var(--border-base)' }}
               >
                 <div>
                   <div className="flex items-center justify-between mb-5">
-                    <div className="w-12 h-12 rounded-xl bg-[#00979c]/15 text-[#00e5ff] flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <div
+                      className="w-12 h-12 rounded-lg flex items-center justify-center text-[#00979D]"
+                      style={{ background: 'var(--brand-teal-surface)' }}
+                    >
                       <IconComponent className="w-6 h-6" />
                     </div>
-                    <span className="text-xs font-mono text-slate-500 uppercase tracking-wider">
+                    <span className="text-xs font-mono uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                       #{committee.id}
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#00e5ff] transition-colors">
+                  <h3
+                    className="text-xl font-bold mb-2 group-hover:text-[#00979D] transition-colors"
+                    style={{ color: 'var(--text-primary)' }}
+                  >
                     {committee.name}
                   </h3>
 
-                  <p className="text-sm text-slate-400 leading-relaxed mb-6">
+                  {/* Increased from text-sm to text-base */}
+                  <p className="text-base leading-relaxed mb-6" style={{ color: 'var(--text-muted)' }}>
                     {committee.description}
                   </p>
 
-                  <div className="space-y-2 pt-4 border-t border-slate-800/80">
-                    <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  <div className="space-y-2 pt-4 border-t" style={{ borderColor: 'var(--border-muted)' }}>
+                    <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-subtle)' }}>
                       Key Responsibilities:
                     </p>
-                    <ul className="space-y-2 text-xs sm:text-sm text-slate-400">
+                    {/* Increased from text-xs sm:text-sm to text-sm sm:text-base */}
+                    <ul className="space-y-2 text-sm sm:text-base" style={{ color: 'var(--text-muted)' }}>
                       {committee.responsibilities.map((resp, idx) => (
                         <li key={idx} className="flex items-start gap-2">
-                          <Check className="w-4 h-4 text-[#00979c] shrink-0 mt-0.5" />
+                          <Check className="w-4 h-4 text-[#00979D] shrink-0 mt-0.5" />
                           <span>{resp}</span>
                         </li>
                       ))}
@@ -79,7 +113,12 @@ export function CommitteeGrid({
                 {onSelectCommittee && (
                   <button
                     onClick={() => onSelectCommittee(committee.id)}
-                    className="mt-6 w-full py-2.5 px-4 rounded-xl bg-slate-800/80 hover:bg-[#00979c] text-slate-200 hover:text-white font-medium text-xs sm:text-sm transition-all focus-visible:ring-2 focus-visible:ring-[#00979c] focus-visible:outline-none cursor-pointer"
+                    className="mt-6 w-full py-2.5 px-4 rounded-lg font-medium text-sm transition-colors border hover:bg-[#00979D] hover:text-white hover:border-[#00979D] focus-visible:ring-2 focus-visible:ring-[#00979D] focus-visible:outline-none cursor-pointer"
+                    style={{
+                      background: 'var(--bg-card-hover)',
+                      borderColor: 'var(--border-base)',
+                      color: 'var(--text-secondary)',
+                    }}
                   >
                     Select for Application
                   </button>

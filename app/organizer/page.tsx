@@ -14,7 +14,7 @@ export default async function OrganizerDashboardPage() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/organizer/login')
+    redirect('/login')
   }
 
   // Fetch committees

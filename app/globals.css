@@ -1,25 +1,106 @@
 @import "tailwindcss";
 
 @layer base {
-  :root {
-    --brand-teal: #00979c;
+  /* ─── Dark theme (default) ─────────────────────────── */
+  :root,
+  [data-theme="dark"] {
+    --brand-teal: #00979D;
     --brand-teal-hover: #008184;
-    --brand-coral: #e47128;
-    --brand-cyan: #00e5ff;
-    --brand-bg: #090d16;
-    --brand-card: #0f172a;
-    --brand-card-hover: #1e293b;
-    --brand-border: #334155;
+    --brand-teal-surface: rgba(0, 151, 157, 0.08);
+    --brand-orange: #F26727;
+    --brand-orange-hover: #D95318;
+    --brand-orange-surface: rgba(242, 103, 39, 0.1);
+    /* Compatibility aliases */
+    --brand-coral: #F26727;
+    --brand-cyan: #00979D;
+
+    /* Backgrounds (Charcoal & Deep Slate) */
+    --bg-base: #13181B;
+    --bg-card: #1E2529;
+    --bg-card-hover: #262F34;
+    --bg-nav: rgba(19, 24, 27, 0.92);
+    --bg-section-alt: rgba(19, 24, 27, 0.65);
+    --bg-footer: #0D1113;
+
+    /* Borders */
+    --border-base: #2E383E;
+    --border-muted: rgba(46, 56, 62, 0.85);
+
+    /* Text */
+    --text-primary: #F7F9FA;
+    --text-secondary: #D1DBDF;
+    --text-muted: #869299;
+    --text-subtle: #616F77;
+
+    /* Form elements */
+    --form-bg: #1E2529;
+    --form-border: #2E383E;
+    --form-border-focus: #00979D;
+
+    /* Scrollbar */
+    --scrollbar-track: #13181B;
+    --scrollbar-thumb: #2E383E;
+    --scrollbar-thumb-hover: #435158;
+  }
+
+  /* ─── Light theme ──────────────────────────────────── */
+  [data-theme="light"] {
+    --brand-teal: #00979D;
+    --brand-teal-hover: #008184;
+    --brand-teal-surface: rgba(0, 151, 157, 0.06);
+    --brand-orange: #F26727;
+    --brand-orange-hover: #D95318;
+    --brand-orange-surface: rgba(242, 103, 39, 0.08);
+    /* Compatibility aliases */
+    --brand-coral: #F26727;
+    --brand-cyan: #00979D;
+
+    /* Backgrounds (Crisp Arduino Days Clean White / Off-White) */
+    --bg-base: #F7F9FA;
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #F1F5F7;
+    --bg-nav: rgba(255, 255, 255, 0.94);
+    --bg-section-alt: rgba(241, 245, 247, 0.75);
+    --bg-footer: #EDF1F3;
+
+    /* Borders */
+    --border-base: #DAE3E3;
+    --border-muted: rgba(218, 227, 227, 0.8);
+
+    /* Text */
+    --text-primary: #2C353A;
+    --text-secondary: #4A575D;
+    --text-muted: #869299;
+    --text-subtle: #616F77;
+
+    /* Form elements */
+    --form-bg: #FFFFFF;
+    --form-border: #DAE3E3;
+    --form-border-focus: #00979D;
+
+    /* Scrollbar */
+    --scrollbar-track: #F7F9FA;
+    --scrollbar-thumb: #DAE3E3;
+    --scrollbar-thumb-hover: #B5C4C6;
   }
 
   * {
-    border-color: #1e293b;
+    border-color: var(--border-base);
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
   }
 
   body {
-    background-color: #090d16;
-    color: #f8fafc;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
     font-feature-settings: "rlig" 1, "calt" 1;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
@@ -30,14 +111,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--scrollbar-thumb);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--scrollbar-thumb-hover);
 }

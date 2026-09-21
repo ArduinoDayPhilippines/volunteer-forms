@@ -26,7 +26,7 @@ export const VOLUNTEER_RULES = [
     icon: Award,
     title: 'Maker Spirit & Mentorship',
     description:
-      'Embrace curiosity! When attendees or young learners struggle with a circuit or line of code, guide them constructively. Volunteers represent the warm, welcoming heartbeat of the Philippine maker ecosystem.',
+      'Support attendees and learners when they ask for assistance with circuits, hardware, or code. Share knowledge generously and encourage questions.',
   },
   {
     icon: Lock,
@@ -44,18 +44,34 @@ export const VOLUNTEER_RULES = [
 
 export function RulesSection() {
   return (
-    <section id="rules-section" className="py-16 md:py-24 border-t border-slate-800/80 bg-slate-950/50">
+    <section
+      id="rules-section"
+      className="py-16 md:py-24 border-t"
+      style={{
+        borderColor: 'var(--border-muted)',
+        background: 'var(--bg-section-alt)',
+      }}
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#e47128]/10 border border-[#e47128]/30 text-[#e47128] text-xs font-semibold uppercase tracking-wider mb-3">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Community Standards</span>
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-md border text-xs font-mono tracking-wider mb-3"
+            style={{
+              background: 'var(--bg-card)',
+              borderColor: 'var(--border-base)',
+              color: '#F26727',
+            }}
+          >
+            <span>// 02. CODE OF CONDUCT</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
-            Volunteer Code of Conduct &amp; Rules
+          <h2
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight"
+            style={{ color: 'var(--text-primary)' }}
+          >
+            Volunteer Code of Conduct &amp; Expectations
           </h2>
-          <p className="mt-4 text-slate-400 text-base sm:text-lg">
-            Our volunteers uphold the highest standards of safety, respect, and enthusiasm. Please review these essential guidelines before submitting your application.
+          <p className="mt-3 text-sm sm:text-base max-w-2xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
+            Review these conduct standards before submitting. All volunteers are asked to commit to these guidelines for event day.
           </p>
         </div>
 
@@ -65,15 +81,20 @@ export function RulesSection() {
             return (
               <div
                 key={idx}
-                className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col justify-start"
+                className="p-6 rounded-xl border flex flex-col justify-start transition-colors hover:border-[#F26727]/50"
+                style={{ background: 'var(--bg-card)', borderColor: 'var(--border-base)' }}
               >
-                <div className="w-10 h-10 rounded-xl bg-[#00979c]/15 text-[#00e5ff] flex items-center justify-center mb-4">
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-[#F26727]"
+                  style={{ background: 'var(--brand-orange-surface)' }}
+                >
                   <Icon className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-semibold text-white mb-2">
+                <h3 className="text-base font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
                   {rule.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                {/* Increased from text-xs sm:text-sm to text-sm sm:text-base */}
+                <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                   {rule.description}
                 </p>
               </div>

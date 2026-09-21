@@ -26,7 +26,7 @@ export async function loginOrganizer(prevState: any, formData: FormData) {
   if (error) {
     return {
       error: error.message === 'Invalid login credentials'
-        ? 'Invalid email or password. Please check your organizer credentials.'
+        ? 'Invalid email or password. Please check your credentials.'
         : error.message,
     }
   }
@@ -37,7 +37,7 @@ export async function loginOrganizer(prevState: any, formData: FormData) {
 export async function logoutOrganizer() {
   const supabase = await createClient()
   await supabase.auth.signOut()
-  redirect('/organizer/login')
+  redirect('/login')
 }
 
 export async function updateApplicationStatusAction({
