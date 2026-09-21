@@ -3,7 +3,7 @@ import { VolunteerApplication, Committee } from '@/lib/types/database'
 export function exportApplicationsToCSV(
   applications: VolunteerApplication[],
   committees: Committee[],
-  filenamePrefix = 'adph-2026-volunteers'
+  filenamePrefix = 'adph-2027-volunteers'
 ) {
   const committeeMap = new Map(committees.map((c) => [c.id, c.name]))
 

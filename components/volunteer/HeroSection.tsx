@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Calendar, MapPin, Clock, ArrowRight, ShieldCheck, Shirt, Utensils, Award, Cpu } from 'lucide-react'
 
 const EVENT_FACTS = [
-  { icon: Calendar, label: 'Date', value: 'March 21, 2026' },
+  { icon: Calendar, label: 'Date', value: 'March 21, 2027' },
   { icon: MapPin, label: 'Location', value: 'TBA (Metro Manila)' },
   { icon: Clock, label: 'Shifts', value: 'Morning / Afternoon / Full Day' },
   { icon: Cpu, label: 'Format', value: 'In-Person & Live Stream' },
@@ -49,7 +49,7 @@ export function HeroSection({
             }}
           >
             <span className="w-2 h-2 rounded-full bg-[#00979D]" />
-            <span>ARDUINO DAY PHILIPPINES 2026 // VOLUNTEER CALL</span>
+            <span>ARDUINO DAY PHILIPPINES 2027 // VOLUNTEER CALL</span>
           </div>
 
           {/* Headline */}
@@ -58,7 +58,7 @@ export function HeroSection({
             style={{ color: 'var(--text-primary)' }}
           >
             Join the Volunteer Crew for{' '}
-            <span className="text-[#00979D]">Arduino Day Philippines 2026</span>
+            <span className="text-[#00979D]">Arduino Day Philippines 2027</span>
           </h1>
 
           {/* Subtitle — grounded and direct */}

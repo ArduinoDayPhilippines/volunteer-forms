@@ -307,7 +307,7 @@ export function AboutSection() {
                       className="text-sm font-semibold"
                       style={{ color: 'var(--text-primary)' }}
                     >
-                      Saturday, March 21, 2026
+                      Sunday, March 21, 2027
                     </div>
                   </div>
                 </div>

@@ -21,7 +21,7 @@ const FAQS: FaqItem[] = [
     id: 'faq-when-where',
     question: 'When and where is the event?',
     answer:
-      'Arduino Day Philippines 2026 will be held on Saturday, March 21, 2026, in Metro Manila. The official venue partner and location address are currently being finalized and will be revealed in upcoming announcements. Doors open at 8:00 AM PHT.',
+      'Arduino Day Philippines 2027 will be held on Sunday, March 21, 2027, in Metro Manila. The official venue partner and location address are currently being finalized and will be revealed in upcoming announcements. Doors open at 8:00 AM PHT.',
   },
   {
     id: 'faq-registration-cost',
@@ -47,7 +47,7 @@ const FAQS: FaqItem[] = [
     answer:
       "We'd love to have you on board! You can fill out our official partnership form below, or reach out to our team directly via email.",
     links: [
-      { label: 'Partnership Form', href: 'https://bit.ly/adph2026-partnerships' },
+      { label: 'Partnership Form', href: 'https://bit.ly/adph2027-partnerships' },
       { label: 'arduinodayph@gmail.com', href: 'mailto:arduinodayph@gmail.com' },
     ],
   },
@@ -116,7 +116,7 @@ export function FaqSection() {
             className="text-base sm:text-lg leading-relaxed"
             style={{ color: 'var(--text-secondary)' }}
           >
-            Everything you need to know about Arduino Day Philippines 2026, from tickets and venue
+            Everything you need to know about Arduino Day Philippines 2027, from tickets and venue
             access to talks and sponsorships.
           </p>
         </div>

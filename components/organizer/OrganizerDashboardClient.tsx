@@ -101,7 +101,7 @@ export function OrganizerDashboardClient({
     exportApplicationsToCSV(
       filteredApplications,
       committees,
-      `adph-2026-${committeeName}`
+      `adph-2027-${committeeName}`
     )
   }
 
@@ -149,7 +149,7 @@ export function OrganizerDashboardClient({
             </div>
             <div>
               <h1 className="text-sm font-bold text-white tracking-wide">
-                Arduino Day Philippines 2026
+                Arduino Day Philippines 2027
               </h1>
               <span className="text-[10px] uppercase font-mono tracking-widest text-[#00e5ff]">
                 Organizer Command Dashboard

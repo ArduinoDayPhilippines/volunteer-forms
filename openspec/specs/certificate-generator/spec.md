@@ -17,11 +17,11 @@ After successful application submission, the success confirmation view SHALL dis
 - **THEN** a PNG file named `volunteer-certificate-<applicantName>.png` is downloaded to the user's device
 
 ### Requirement: Certificate content accuracy
-The certificate SHALL display the volunteer's full name, their primary committee name, the application reference ID, the event name "Arduino Day Philippines 2026", and the issue date.
+The certificate SHALL display the volunteer's full name, their primary committee name, the application reference ID, the event name "Arduino Day Philippines 2027", and the issue date.
 
 #### Scenario: Certificate includes volunteer details
 - **WHEN** the certificate is generated
-- **THEN** it shows the exact full name entered in the application form, the primary committee chosen, the application ID, and the event name
+- **THEN** it shows the exact full name entered in the application form, the primary committee chosen, the application ID, and the event name "Arduino Day Philippines 2027"
 
 ### Requirement: Certificate branding
 The certificate SHALL use Arduino Day Philippines brand colors (teal #00979c, cyan #00e5ff, coral #e47128) and be styled as a formal certificate of contribution suitable for printing or sharing.

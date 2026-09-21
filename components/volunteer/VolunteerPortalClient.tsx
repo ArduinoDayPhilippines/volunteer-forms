@@ -47,7 +47,7 @@ export function VolunteerPortalClient({
             <div className="relative h-10 w-10 sm:h-11 sm:w-11 shrink-0 flex items-center">
               <Image
                 src="/images/adph-logo.png"
-                alt="Arduino Day Philippines 2026"
+                alt="Arduino Day Philippines 2027"
                 fill
                 priority
                 sizes="(max-width: 640px) 40px, 44px"
@@ -65,7 +65,7 @@ export function VolunteerPortalClient({
                 Arduino Day Philippines
               </span>
               <span className="text-[9px] uppercase font-mono tracking-widest text-[#00979D]">
-                Volunteer Portal 2026
+                Volunteer Portal 2027
               </span>
             </div>
           </Link>
@@ -262,7 +262,7 @@ export function VolunteerPortalClient({
             <div className="relative h-11 w-11 shrink-0">
               <Image
                 src="/images/adph-logo.png"
-                alt="Arduino Day Philippines 2026"
+                alt="Arduino Day Philippines 2027"
                 fill
                 sizes="44px"
                 className="object-contain"
@@ -270,7 +270,7 @@ export function VolunteerPortalClient({
             </div>
             <div>
               <p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
-                Arduino Day Philippines 2026
+                Arduino Day Philippines 2027
               </p>
               <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
                 Empowering the Philippine maker &amp; open-hardware movement.

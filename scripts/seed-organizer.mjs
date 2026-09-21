@@ -12,7 +12,7 @@ const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
 
 async function seed() {
   const email = 'organizer@arduinoday.ph'
-  const password = 'ArduinoDay2026!'
+  const password = process.env.ORGANIZER_SEED_PASSWORD || 'ArduinoDay2027!'
 
   console.log(`Checking organizer user: ${email}`)
 

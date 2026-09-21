@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Arduino Day Philippines 2026 | Volunteer Recruitment & Management',
+  title: 'Arduino Day Philippines 2027 | Volunteer Recruitment & Management',
   description:
-    'Join the official volunteer organizing team for Arduino Day Philippines 2026. Empower makers, students, and hardware innovators across the nation.',
+    'Join the official volunteer organizing team for Arduino Day Philippines 2027. Empower makers, students, and hardware innovators across the nation.',
   keywords: [
     'Arduino',
     'Arduino Day Philippines',

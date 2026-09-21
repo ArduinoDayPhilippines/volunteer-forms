@@ -273,7 +273,7 @@ export function VolunteerForm({
           Application Received!
         </h3>
         <p className="text-base sm:text-lg max-w-md mx-auto mb-8" style={{ color: 'var(--text-secondary)' }}>
-          Mabuhay, <span className="text-[#00979D] font-semibold">{submissionResult.applicantName}</span>! Your volunteer application for Arduino Day Philippines 2026 has been submitted to the organizing committee.
+          Mabuhay, <span className="text-[#00979D] font-semibold">{submissionResult.applicantName}</span>! Your volunteer application for Arduino Day Philippines 2027 has been submitted to the organizing committee.
         </p>
 
         {/* Reference ID card */}

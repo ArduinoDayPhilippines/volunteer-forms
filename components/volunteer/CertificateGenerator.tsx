@@ -78,7 +78,7 @@ function drawCertificate(
   ctx.font = 'bold 12px sans-serif'
   ctx.fillStyle = '#F26727'
   ctx.textAlign = 'right'
-  ctx.fillText('2026', w - bm - 32, bm + 52)
+  ctx.fillText('2027', w - bm - 32, bm + 52)
 
   // ── Divider line ─────────────────────────────────────────────────
   const divY = bm + 16 + bannerH + 2
@@ -143,7 +143,7 @@ function drawCertificate(
 
   ctx.font = 'bold 16px sans-serif'
   ctx.fillStyle = '#00979D'
-  ctx.fillText('Arduino Day Philippines 2026', w / 2, divY + 260)
+  ctx.fillText('Arduino Day Philippines 2027', w / 2, divY + 260)
 
   // ── Mid-divider ──────────────────────────────────────────────────
   const midDivY = divY + 278
@@ -179,7 +179,7 @@ function drawCertificate(
   ctx.font = '10px sans-serif'
   ctx.fillStyle = 'rgba(0, 151, 157, 0.5)'
   ctx.fillText(
-    'ARDUINO DAY PHILIPPINES · VOLUNTEER RECOGNITION · 2026',
+    'ARDUINO DAY PHILIPPINES · VOLUNTEER RECOGNITION · 2027',
     w / 2,
     sealY
   )
